@@ -1,0 +1,122 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { account } from '../utils/appwrite';
+
+const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  console.log("lest connect: aman-raj.xyz")
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const session = await account.getSession('current');
+        if (session) {
+          navigate('/chatroom');
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const session = await account.createEmailPasswordSession(email, password);
+      console.log('Login successful:', session);
+      navigate('/chatroom');
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    const guestEmail = 'guest@gmail.com';
+    const guestPassword = '12345678'; // Replace with the actual guest password
+    
+    setError(null);
+    setEmail(guestEmail);
+    setPassword(guestPassword);
+
+    try {
+      const session = await account.createEmailPasswordSession(guestEmail, guestPassword);
+      console.log('Guest login successful:', session);
+      navigate('/chatroom');
+    } catch (error) {
+      console.error('Guest login error:', error);
+      setError(error.message);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#111b21]">
+      <div className="bg-[#202c33] p-8 rounded-2xl shadow-lg w-96 transform  transition-transform duration-300">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-[#766ac8]">BuzzSphere</h2>
+          <p className="text-[#6559b8] mt-2">Login to acess chatroom</p>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-6">
+          {error && (
+            <p className="text-red-500 text-sm text-center  py-2 rounded-lg">
+              {error}
+            </p>
+          )}
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[#6559b8]">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2   text-white bg-[#111b21] rounded-lg focus:ring-1  outline-none transition-colors duration-300"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-[#6559b8]">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2  text-white bg-[#111b21] rounded-lg focus:ring-1  outline-none transition-colors duration-300"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3 px-4 bg-[#766ac8] text-white rounded-lg hover:bg-rose-700 focus:ring-4 transition-colors duration-300 font-medium"
+          >
+            Login
+          </button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{' '}
+            <button onClick={handleGuestLogin} className="text-rose-600 hover:text-rose-700 font-medium">
+              Login as Guest
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginForm;
