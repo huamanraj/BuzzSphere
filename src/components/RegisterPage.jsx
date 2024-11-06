@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account } from '../utils/appwrite';
+import MoonLoader from 'react-spinners/MoonLoader';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,9 @@ const RegisterPage = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     setError(null);
@@ -120,16 +123,16 @@ const RegisterPage = () => {
           <div className='pt-3'>  
           <button
             type="submit"
-            className="w-full py-2  -3  px-4 bg-[#766ac8] text-white rounded-lg hover:bg-green-800 focus:ring-4 transition-colors duration-300 font-medium"
+            className="w-full py-2  font-semibold  px-4 bg-[#766ac8] text-white rounded-lg hover:bg-green-800 focus:ring-4 transition-colors duration-300 "
           >
             Register
           </button> </div>
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm  text-gray-600">
             Already have an account?{' '}
-            <button onClick={() => navigate('/')} className="text-green-600 hover:text-green-700 font-medium">
+            <button onClick={() => navigate('/')} className="text-green-600 hover:text-green-700 font-semibold">
               Login here
             </button>
           </p>

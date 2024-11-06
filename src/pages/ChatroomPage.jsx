@@ -1,7 +1,7 @@
 import ChatroomHeader from '../components/ChatroomHeader';
 import ChatMessageList from '../components/ChatMessageList';
 import ChatMessageInput from '../components/ChatMessageInput';
-
+import SaveUserIP from '../components/SaveUserIP';
 const ChatroomPage = () => {
   return (
     <div>
@@ -10,6 +10,7 @@ const ChatroomPage = () => {
         <ChatMessageList />
       </div>
       <ChatMessageInput />
+      
     </div>
   );
 };

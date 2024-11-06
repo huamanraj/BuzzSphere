@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { databases, account, client } from '../utils/appwrite';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/AuthContext';
+
 
 const ChatroomHeader = () => {
   const [users, setUsers] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-
+  const { currentUser, setCurrentUser } = useAuth();
 
 
   // useEffect(() => {
@@ -38,15 +40,18 @@ const ChatroomHeader = () => {
   const handleLogout = async () => {
     try {
       await account.deleteSession('current');
+      setCurrentUser(null);
       navigate('/');
+      console.log('logged out');
+      
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
 
-  const getOnlineUsersCount = () => {
-    return users ? users.filter(user => user?.status === 'online').length : 0;
-  };
+  // const getOnlineUsersCount = () => {
+  //   return users ? users.filter(user => user?.status === 'online').length : 0;
+  // };
   
   return (
     <header className="bg-[#202c33] shadow-md fixed top-0 left-0 right-0 z-50">
@@ -116,7 +121,7 @@ const ChatroomHeader = () => {
         {isMenuOpen && (
           <div className="md:hidden pb-4">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <div className="flex flex-wrap  gap-2 mb-3">
+              {/* <div className="flex flex-wrap  gap-2 mb-3">
                 
                 {users.map((user) => (
                   <div
@@ -134,7 +139,7 @@ const ChatroomHeader = () => {
                     }`}></span>
                   </div>
                 ))}
-              </div>
+              </div> */}
               <button
                 onClick={handleLogout}
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-rose-600 rounded-lg hover:bg-rose-700 transition-colors duration-200"
