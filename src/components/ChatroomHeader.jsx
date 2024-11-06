@@ -7,7 +7,7 @@ const ChatroomHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  console.log("let's connect: aman-raj.xyz");
+
 
   // useEffect(() => {
   //   const fetchUsers = async () => {

@@ -6,7 +6,7 @@ const ChatroomPage = () => {
   return (
     <div>
       <ChatroomHeader />
-      <div className="flex flex-col h-screen pt-16 pb-20"> {/* pt-16 for header, pb-24 for input */}
+      <div className="flex flex-col h-screen pt-16 pb-20"> 
         <ChatMessageList />
       </div>
       <ChatMessageInput />

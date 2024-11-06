@@ -24,8 +24,8 @@ const ChatMessageInput = () => {
     try {
       if (message.trim()) {
         await databases.createDocument(
-          '67290b30003500e00f96',
-          '67290cca001db048a31e',
+          import.meta.env.VITE_APPWRITE_DATABASE_ID,
+          import.meta.env.VITE_APPWRITE_COLLECTION_ID,
           'unique()',
           {
             text: message,
@@ -116,12 +116,12 @@ const ChatMessageInput = () => {
         {/* Emoji Picker Popover */}
         {showEmojiPicker && (
           <div className="absolute bottom-full right-0 mb-2">
-            <div className=" rounded-lg shadow-lg p-2">
+            <div className=" rounded-lg shadow-lg ">
               <EmojiPicker
                 onEmojiClick={onEmojiClick}
                 skinTone={1}
-                height={350}
-                width={300}
+                height={300}
+                width={350}
                 theme="dark"
               />
             </div>

@@ -39,8 +39,8 @@ const LoginForm = () => {
 
   const handleGuestLogin = async () => {
     const guestEmail = 'guest@gmail.com';
-    const guestPassword = '12345678';
-
+    const guestPassword = '12345678'; 
+    
     setError(null);
     setEmail(guestEmail);
     setPassword(guestPassword);
@@ -105,25 +105,15 @@ const LoginForm = () => {
             Login
           </button>
         </form>
+
         <div className="mt-6 text-center">
-          <div className="text-sm flex flex-col text-gray-600">
+          <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-
-            <div className="flex flex-col">
-
-            
-            <button onClick={() => navigate('/register')} className="text-blue-600 hover:text-blue-700 font-medium">
-              Register here
-            </button>  
-            <button onClick={handleGuestLogin} className="text-white hover:text-white font-medium">
+            <button onClick={handleGuestLogin} className="text-rose-600 hover:text-rose-700 font-medium">
               Login as Guest
             </button>
-            </div>
-          </div>
+          </p>
         </div>
-
-
-
       </div>
     </div>
   );
