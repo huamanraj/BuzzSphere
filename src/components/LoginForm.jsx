@@ -32,8 +32,9 @@ const LoginForm = () => {
 
     try {
       const session = await account.createEmailPasswordSession(email, password);
-      console.log('Login successful');
-      navigate('/chatroom');
+      setCurrentUser(session);
+        console.log('Guest login successful');
+        navigate('/chatroom');  
     } catch (error) {
       console.error('Login error:', error);
       setError(error.message);

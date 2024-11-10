@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account } from '../utils/appwrite';
 import MoonLoader from 'react-spinners/MoonLoader';
+import { useAuth } from '../utils/AuthContext';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,8 @@ const RegisterPage = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const { currentUser, setCurrentUser } = useAuth();
 
   
   const handleRegister = async (e) => {
@@ -30,10 +32,32 @@ const RegisterPage = () => {
       setError('Password should be at least 8 characters long.');
       return;
     }
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain at least one uppercase letter.');
+      return;
+    }
+    
+    // Validate inclusion of lowercase letters
+    if (!/[a-z]/.test(password)) {
+      setError('Password must contain at least one lowercase letter.');
+      return;
+    }
+    
+    // Validate inclusion of numbers
+    if (!/[0-9]/.test(password)) {
+      setError('Password must contain at least one digit.');
+      return;
+    }
+    
+    // Validate inclusion of special characters
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      setError('Password must contain at least one special character.');
+      return;
+    }
 
     try {
       
-      
+      setLoading(true);
       const response = await account.create('unique()', email, password, name);
       console.log('Registration successful:', response);
 
@@ -43,17 +67,33 @@ const RegisterPage = () => {
       console.log('Login successful:', session);
 
       
+      
       setSuccessMessage('Registration successful! You are now logged in.');
 
-      setTimeout(() => navigate('/chatroom'), 2000); 
+      setTimeout(() => {
+        setCurrentUser(session);
+        console.log('Guest login successful');
+        navigate('/chatroom');  
+      }, 1000); 
 
     } catch (error) {
       console.error('Registration error:', error);
       setError(error.message);
     }
+    finally {
+      setLoading(false);
+      console.log('loading done');
+    }
   };
 
   return (
+    <div className="relative">
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <MoonLoader color="#ffffff" size={60} />
+        </div>
+      )}
+
     <div className="min-h-screen flex items-center justify-center bg-[#111b21]">
       <div className="bg-[#202c33] p-8 rounded-2xl shadow-lg w-96 transform transition-transform duration-300">
         <div className="text-center mb-8">
@@ -138,6 +178,7 @@ const RegisterPage = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { databases, account, client } from '../utils/appwrite';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
+import MoonLoader from 'react-spinners/MoonLoader';
+
 
 
 const ChatroomHeader = () => {
@@ -9,6 +11,7 @@ const ChatroomHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useAuth();
+  const [loading, setLoading] = useState(false);
 
 
   // useEffect(() => {
@@ -39,6 +42,7 @@ const ChatroomHeader = () => {
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       await account.deleteSession('current');
       setCurrentUser(null);
       navigate('/');
@@ -47,6 +51,10 @@ const ChatroomHeader = () => {
     } catch (error) {
       console.error('Logout error:', error);
     }
+    finally {
+      setLoading(false);
+      console.log('logged out');
+    }
   };
 
   // const getOnlineUsersCount = () => {
@@ -54,6 +62,10 @@ const ChatroomHeader = () => {
   // };
   
   return (
+
+    
+
+
     <header className="bg-[#202c33] shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
@@ -150,7 +162,13 @@ const ChatroomHeader = () => {
           </div>
         )}
       </div>
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <MoonLoader color="#ffffff" size={60} />
+        </div>
+      )}
     </header>
+    
   );
 };
 
