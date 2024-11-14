@@ -46,31 +46,65 @@ const LoginForm = () => {
 
 
 
+  const handleGuestLogin = async () => {
+    setError(null);
+    setLoading(true);
+  
+    try {
+      // Get the user's IP address
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const { ip } = await ipResponse.json();
+  
+      // Extract the last 4 digits of the IP address
+      const ipParts = ip.split('.');
+      const ipSuffix = ipParts[ipParts.length - 1];
+  
+      // Create an anonymous session
+      const user = await account.createAnonymousSession();
+  
+      // Generate a guest name using the IP suffix
+      const guestName = `Guest User ${ipSuffix}`;
+  
+      // Update the anonymous user's name
+      await account.updateName(guestName);
+  
+      setCurrentUser({ ...user, name: guestName });
+      console.log(`Guest login successful as ${guestName}`);
+      navigate('/chatroom');  
+    } catch (error) {
+      console.error('Guest login error:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+      console.log('Loading done');
+    }
+  };
+  
+  
 
- 
-    const handleGuestLogin = async () => {
-      const guestEmail = 'guest@gmail.com';
-      const guestPassword = '12345678';
+    // const handleGuestLogin = async () => {
+    //   const guestEmail = 'guest@gmail.com';
+    //   const guestPassword = '12345678';
 
-      setError(null);
-      setEmail(guestEmail);
-      setPassword(guestPassword);
-      setLoading(true);
+    //   setError(null);
+    //   setEmail(guestEmail);
+    //   setPassword(guestPassword);
+    //   setLoading(true);
 
-      try {
-        const user = await account.createEmailPasswordSession(guestEmail, guestPassword);
-        setCurrentUser(user);
-        console.log('Guest login successful');
-        navigate('/chatroom');  
+    //   try {
+    //     const user = await account.createEmailPasswordSession(guestEmail, guestPassword);
+    //     setCurrentUser(user);
+    //     console.log('Guest login successful');
+    //     navigate('/chatroom');  
        
-      } catch (error) {
-        console.error('Guest login error:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-        console.log('loading done');
-      }
-    };
+    //   } catch (error) {
+    //     console.error('Guest login error:', error);
+    //     setError(error.message);
+    //   } finally {
+    //     setLoading(false);
+    //     console.log('loading done');
+    //   }
+    // };
 
 
 
