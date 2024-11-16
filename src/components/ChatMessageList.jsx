@@ -179,9 +179,28 @@ const ChatMessageList = ({ replyToMessage, setReplyToMessage }) => {
                 )}
 
                 <div className={`group relative max-w-[90%] px-4 py-2 rounded-xl ${isCurrentUser ? 'bg-[#766ac8] text-white rounded-tr-none' : 'bg-[#202c33] text-white rounded-tl-none shadow-sm'}`}>
+
+
                   <p className="text-sm whitespace-pre-wrap">
-                    {message.text}
+                    <Linkify
+                        componentDecorator={(decoratedHref, decoratedText, key) => (
+                          <a href={decoratedHref} target="_blank" rel="noopener noreferrer" key={key} className="">
+                            {decoratedText}
+                          </a>
+                        )}
+                      >
+                        {message.text}
+                      </Linkify>
                   </p>
+
+                  <span
+                      className={`absolute bottom-1 ${isCurrentUser
+                        ? 'left-0 -translate-x-[calc(100%+0.5rem)]'
+                        : 'right-0 translate-x-[calc(100%+0.5rem)]'
+                        } opacity-0 group-hover:opacity-100 transition-opacity text-xs text-gray-400`}
+                    >
+                      {formatTime(message.createdAt)}
+                    </span>
                 </div>
               </motion.div>
             );
